@@ -1,5 +1,16 @@
 #see for java tunning https://docs.oracle.com/cd/E15523_01/web.1111/e13814/jvm_tuning.htm#PERFM161
-version: '3.8'
+version: '3.9'
+networks:
+  app-network-public:
+    driver: bridge
+
+volumes:
+  sql-server-data:
+    driver: local
+  sqldata:
+  sqllog:
+  sqlbackup:
+  
 services:
  
  ##########################################################################     
@@ -7,32 +18,23 @@ services:
  ##########################################################################       
   sql_db:
     container_name: sql_db
-    image: microsoft/mssql-server-windows-developer
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    networks:
+      - app-network-public
+    restart: always
+    env_file:
+      - sqlserver.env
+      - sapassword.env
     ports:
-        - 1433:1433
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: db_evaluacion_bcp
-        MYSQL_PASSWORD: root
+      - '1433:1433'
+    volumes:
+      - sql-server-data:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+      - /c/docker/shared:/usr/shared
   
- ##########################################################################     
- #exchangeRate service
- ##########################################################################  
-  podology-user:
-    container_name: podology-user
-    image: podology-user
-    environment:
-      ##SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/db_evaluacion_bcp?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sql_db:1433;encrypt=true;trustServerCertificate=true;databaseName=DB_PODOLOGY
-      SPRING_DATASOURCE_USERNAME: "sa"
-      SPRING_DATASOURCE_PASSWORD: "root"
-    ports:
-      - 8082:8080
-    build:
-      context: "./"
-      dockerfile: "Dockerfile"
-    depends_on:
-      - sql_db 
+
       
 
 
