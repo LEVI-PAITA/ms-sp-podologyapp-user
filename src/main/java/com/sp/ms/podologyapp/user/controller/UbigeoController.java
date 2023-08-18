@@ -2,6 +2,8 @@ package com.sp.ms.podologyapp.user.controller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +49,13 @@ public class UbigeoController {
 	public List<District> getDistricts (){
 		
 		return districtRepository.findAll();
+		
+	}
+	
+	@GetMapping("/v1/getDistrictId")
+	public List<District> getDistrictsDescription(@PathParam(value = "districtId") String districtId){
+		
+		return districtRepository.findByDistrictId(districtId);
 		
 	}
 
