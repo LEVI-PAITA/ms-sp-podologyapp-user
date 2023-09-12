@@ -58,5 +58,13 @@ public class UbigeoController {
 		return districtRepository.findByDistrictId(districtId);
 		
 	}
+	
+	@GetMapping("/v1/getProvinceDepartment")
+	public List<District> getProvinceAndDepartment(@PathParam(value = "provinceId") String provinceId,
+			@PathParam(value = "departmentId") String departmentId){
+		
+		return districtRepository.findByProvinceAndDepartment(provinceId, departmentId);
+		
+	}
 
 }

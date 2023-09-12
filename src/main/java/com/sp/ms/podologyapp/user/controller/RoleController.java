@@ -20,7 +20,7 @@ public class RoleController {
 	private RoleService roleService;
 	
 	@GetMapping("/v1/getRole")
-	public List<Role> getRole (){
+	public List<Role>getRole(){
 		
 		return roleService.getRole();
 		
