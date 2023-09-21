@@ -25,8 +25,8 @@ import lombok.Data;
 public class Usuario implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_user")
+	@Column(name = "id_user", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idUser;
 	
 	@Column(name = "username")
